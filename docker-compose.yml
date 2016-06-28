@@ -1,0 +1,47 @@
+version: '2'
+services:
+  memcached:
+    image: memcached:latest
+
+  mysql:
+    build: mysql/
+    container_name: mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ieft
+      MYSQL_USER: ieft
+      MYSQL_PASSWORD: ieft
+    volumes:
+          - "./docker/mysql/database:/var/lib/mysql"
+  apache:
+    build: apache/
+    container_name: apache
+    restart: always
+    depends_on:
+      - mysql
+    links:
+      - mysql
+      - memcached:memcached
+    ports:
+      - "80:80"
+    volumes:
+      - "./:/var/www/html"
+    environment:
+      XDEBUG_CONFIG: "remote_host=192.168.43.23"
+      PHP_IDE_CONFIG: "serverName=192.168.99.100"
+  phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: phpmyadmin
+      environment:
+       - PMA_ARBITRARY=1
+       - PMA_HOSTS=mysql
+       - PMA_USER=ieft
+       - PMA_PASSWORD=ieft
+      restart: always
+      ports:
+       - 8080:80
+      volumes:
+       - "/sessions"
