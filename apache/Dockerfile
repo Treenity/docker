@@ -84,8 +84,7 @@ RUN touch /usr/local/etc/php/conf.d/docker.ini \
     && echo "post_max_size = 64M" >> /usr/local/etc/php/conf.d/docker.ini \
     && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker.ini \
     && echo "display_errors = On" >> /usr/local/etc/php/conf.d/docker.ini \
-    && echo "date.timezone = Europe/Paris" >> /usr/local/etc/php/conf.d/docker.ini \
-
+    && echo "date.timezone = Europe/Paris" >> /usr/local/etc/php/conf.d/docker.ini
 
 # xdebug
 RUN yes | pecl install xdebug \
