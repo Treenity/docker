@@ -28,7 +28,7 @@ RUN apt-get update && \
 
 # For mcrypt
 
-		php5-mcrypt \
+		libmcrypt-dev \
 
 # For memcached
 
@@ -71,7 +71,6 @@ RUN apt-get update && \
 		zip \
 	&& \
 
-RUN php5enmod mcrypt
 # Some extensions need to be installed via PECL
 
 	pecl install apcu-4.0.8 memcached && \
