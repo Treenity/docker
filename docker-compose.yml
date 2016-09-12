@@ -2,6 +2,7 @@ version: '2'
 services:
   memcached:
       image: memcached:latest
+      container_name: memcached
 
   mysql:
     image: treenity/mysql
