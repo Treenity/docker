@@ -78,13 +78,16 @@ RUN apt-get update && \
 	echo 'extension = memcached.so' > /usr/local/etc/php/conf.d/memcached.ini
 
 # php5 apache2 stuff
-RUN touch /usr/local/etc/php/conf.d/docker.ini \
-    && echo "memory_limit  = 128M" >> /usr/local/etc/php/conf.d/docker.ini \
-    && echo "upload_max_filesize = 64M" >> /usr/local/etc/php/conf.d/docker.ini \
-    && echo "post_max_size = 64M" >> /usr/local/etc/php/conf.d/docker.ini \
-    && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker.ini \
-    && echo "display_errors = On" >> /usr/local/etc/php/conf.d/docker.ini \
-    && echo "date.timezone = Europe/Paris" >> /usr/local/etc/php/conf.d/docker.ini
+
+COPY ./php.ini /usr/local/etc/php/php.ini
+
+RUN touch /usr/local/etc/php/conf.d/php.ini \
+    && echo "memory_limit  = 128M" >> /usr/local/etc/php/conf.d/php.ini \
+    && echo "upload_max_filesize = 64M" >> /usr/local/etc/php/conf.d/php.ini \
+    && echo "post_max_size = 64M" >> /usr/local/etc/php/conf.d/php.ini \
+    && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/php.ini \
+    && echo "display_errors = On" >> /usr/local/etc/php/conf.d/php.ini \
+    && echo "date.timezone = Europe/Paris" >> /usr/local/etc/php/conf.d/php.ini
 
 # xdebug
 RUN yes | pecl install xdebug \
