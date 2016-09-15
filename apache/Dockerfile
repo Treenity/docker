@@ -80,7 +80,7 @@ RUN apt-get update && \
 
 COPY ./php.ini /usr/local/etc/php/php.ini
 
-RUN sudo echo "ServerName localhost" >>/etc/apache2/apache2.conf
+RUN echo "ServerName localhost" >>/etc/apache2/apache2.conf
 
 RUN touch /usr/local/etc/php/conf.d/php.ini \
     && echo "memory_limit  = 128M" >> /usr/local/etc/php/conf.d/php.ini \
