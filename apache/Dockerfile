@@ -4,7 +4,6 @@ MAINTAINER Ronan Pozzi <contact@treenity-web.fr>
 # fix osx permissions
 RUN usermod -u 1000 www-data
 RUN groupmod -g 1000 www-data
-
 RUN a2enmod rewrite
 
 RUN apt-get update && \
@@ -80,6 +79,8 @@ RUN apt-get update && \
 # php5 apache2 stuff
 
 COPY ./php.ini /usr/local/etc/php/php.ini
+
+RUN sudo echo "ServerName localhost" >>/etc/apache2/apache2.conf
 
 RUN touch /usr/local/etc/php/conf.d/php.ini \
     && echo "memory_limit  = 128M" >> /usr/local/etc/php/conf.d/php.ini \
