@@ -1,8 +1,12 @@
 FROM nginx:latest
 MAINTAINER Ronan Pozzi <contact@treenity-web.fr>
 
-COPY ./default.conf /etc/nginx/conf.d/
+ADD ./default.conf /etc/nginx/conf.d/default.conf
 
-VOLUME /var/www/html
+DD conf.d /etc/nginx/conf.d
 
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 80
+
+VOLUME /var/www
+
+WORKDIR /var/www
