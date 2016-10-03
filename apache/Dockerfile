@@ -79,7 +79,7 @@ RUN apt-get update && \
 
 # php5 apache2 stuff
 
-RUN ADD ./php.ini /usr/local/etc/php/php.ini
+COPY ./php.ini /usr/local/etc/php/php.ini
 
 RUN touch /usr/local/etc/php/conf.d/php.ini \
     && echo "memory_limit  = 128M" >> /usr/local/etc/php/conf.d/php.ini \
