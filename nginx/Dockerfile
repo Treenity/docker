@@ -3,7 +3,7 @@ MAINTAINER Ronan Pozzi <contact@treenity-web.fr>
 
 ADD ./default.conf /etc/nginx/conf.d/default.conf
 
-COPY ../apache/php.ini /usr/local/etc/php/php.ini
+COPY ./php.ini /usr/local/etc/php/php.ini
 
 RUN apt-get update && \
 	apt-get install -y --no-install-recommends \
