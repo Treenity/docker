@@ -2,54 +2,56 @@ version: '2'
 services:
   memcached:
       image: memcached:latest
+      container_name: memcached
 
   mysql:
-    image: treenity/mysql
-    container_name: mysql
-    restart: always
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: database
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
-    volumes:
-      - "./docker/mysql/database:/var/lib/mysql"
+      image: treenity/mysql
+      container_name: mysql
+      restart: always
+      ports:
+        - "3306:3306"
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: database
+        MYSQL_USER: user
+        MYSQL_PASSWORD: pass
+      volumes:
+        - "./docker/mysql/database:/var/lib/mysql"
 
   nginx:
-    image: treenity/nginx
-    container_name: nginx
-    restart: always
-    depends_on:
-      - mysql
-    links:
-      - fpm
-      - mysql
-      - memcached:memcached
-    ports:
-      - "80:80"
-    volumes:
-          - "./:/var/www/html"
-    environment:
-      XDEBUG_CONFIG: "remote_host={{YOUR_LOCAL_IP]]"
-      PHP_IDE_CONFIG: "serverName={{DOCKER_HOST_IP}}"
+      image: treenity/nginx
+      container_name: nginx
+      restart: always
+      depends_on:
+        - mysql
+      links:
+        - mysql
+        - fpm
+        - memcached:memcached
+      ports:
+        - "80:80"
+      volumes:
+            - "./:/var/www/html"
+      environment:
+        XDEBUG_CONFIG: "remote_host={{YOUR_LOCAL_IP]]"
+        PHP_IDE_CONFIG: "serverName={{DOCKER_HOST_IP}}"
   fpm:
       image: php:fpm
+      container_name: fpm
       ports:
-          - ":9000"
-      volumes_from:
-          - nginx
+          - "9000"
+      volumes:
+          - '/var/www/html'
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOSTS=mysql
-      - PMA_USER=user
-      - PMA_PASSWORD=pass
-    restart: always
-    ports:
-      - 8080:80
-    volumes:
-      - "/sessions"
+      image: phpmyadmin/phpmyadmin
+      container_name: phpmyadmin
+      environment:
+        - PMA_ARBITRARY=1
+        - PMA_HOSTS=mysql
+        - PMA_USER=user
+        - PMA_PASSWORD=pass
+      restart: always
+      ports:
+        - 8080:80
+      volumes:
+        - "/sessions"
