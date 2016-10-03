@@ -3,10 +3,8 @@ MAINTAINER Ronan Pozzi <contact@treenity-web.fr>
 
 ADD ./default.conf /etc/nginx/conf.d/default.conf
 
-DD conf.d /etc/nginx/conf.d
-
 EXPOSE 80
 
-VOLUME /var/www
+VOLUME /usr/share/nginx/html
 
-WORKDIR /var/www
+WORKDIR /usr/share/nginx/html

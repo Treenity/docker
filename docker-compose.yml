@@ -31,7 +31,7 @@ services:
       ports:
         - "80:80"
       volumes:
-            - "./:/var/www"
+            - "./:/usr/share/nginx/html"
       environment:
         XDEBUG_CONFIG: "remote_host={{YOUR_LOCAL_IP]]"
         PHP_IDE_CONFIG: "serverName={{DOCKER_HOST_IP}}"
@@ -41,7 +41,7 @@ services:
       ports:
           - "9000"
       volumes:
-          - '/var/www'
+          - '/usr/share/nginx/html'
   phpmyadmin:
       image: phpmyadmin/phpmyadmin
       container_name: phpmyadmin
