@@ -5,42 +5,7 @@ ADD ./default.conf /etc/nginx/conf.d/default.conf
 
 COPY ./php.ini /usr/local/etc/php/php.ini
 
-RUN apt-get update && \
-	apt-get install -y --no-install-recommends \
-
-# For bz2
-
-		libbz2-dev \
-
-# For gd
-
-		libfreetype6-dev \
-		libjpeg62-turbo-dev \
-		libpng12-dev \
-		libxpm-dev \
-		libvpx-dev \
-
-# For ftp
-
-		libssl-dev \
-
-# For mcrypt
-
-		libmcrypt-dev \
-
-# For memcached
-
-		libmemcached-dev \
-	&& \
-
-# Cleanup
-
-	apt-get clean && \
-	rm -rf /var/lib/apt/lists/* && \
-
-# Configure GD package for JPEG support
-
-	docker-php-ext-configure gd \
+RUN docker-php-ext-configure gd \
 		--with-freetype-dir=/usr/lib/x86_64-linux-gnu/ \
 		--with-jpeg-dir=/usr/lib/x86_64-linux-gnu/ \
 		--with-xpm-dir=/usr/lib/x86_64-linux-gnu/ \
