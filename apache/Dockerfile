@@ -101,6 +101,6 @@ RUN yes | pecl install xdebug \
     && echo "xdebug.remote_host = 10.254.254.254" >> /usr/local/etc/php/conf.d/xdebug.ini
    
 
-VOLUME /var/www/html
+WORKDIR /var/www/html
 
 CMD ["apache2-foreground"]
