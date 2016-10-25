@@ -16,7 +16,7 @@ services:
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
     volumes:
-      - "./docker/mysql/database:/var/lib/mysql"
+      - "./.docker/mysql/database:/var/lib/mysql"
 
   apache:
     image: treenity/apache
