@@ -32,7 +32,7 @@ services:
     volumes:
       - "./:/var/www/html"
     environment:
-      XDEBUG_CONFIG: "remote_host={{YOUR_LOCAL_IP]]"
+      XDEBUG_CONFIG: "remote_host={{YOUR_LOCAL_IP}}"
       PHP_IDE_CONFIG: "serverName={{DOCKER_HOST_IP}}"
 
   phpmyadmin:
