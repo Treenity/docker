@@ -96,6 +96,6 @@ RUN yes | pecl install xdebug \
     && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
 
-WORKDIR /var/www/html
+VOLUME /var/www/html
 
 CMD ["apache2-foreground"]
