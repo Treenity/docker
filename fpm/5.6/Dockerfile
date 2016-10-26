@@ -1,6 +1,6 @@
 FROM php:5.6-fpm
 MAINTAINER Ronan Pozzi <contact@treenity-web.fr>
-#COPY ./php.ini /usr/local/etc/php/php.ini
+
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
         sudo \
         openssh-server \
@@ -17,16 +17,28 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
         libzzip-dev \
         sendmail \
         && apt-get autoremove -y && apt-get autoclean -y
+        
 RUN useradd docker -d /var/www/html -p null -s /bin/bash -g sudo \
     && echo "docker:docker" | chpasswd
+    
 RUN docker-php-ext-install intl mcrypt mbstring mysql mysqli pdo_mysql ftp sockets xmlrpc zip \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
+    
+RUN touch /usr/local/etc/php/conf.d/php.ini \
+    && echo "memory_limit  = 128M" >> /usr/local/etc/php/conf.d/php.ini \
+    && echo "upload_max_filesize = 1024" >> /usr/local/etc/php/conf.d/php.ini \
+    && echo "post_max_size = 1024" >> /usr/local/etc/php/conf.d/php.ini \
+    && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/php.ini \
+    && echo "display_errors = On" >> /usr/local/etc/php/conf.d/php.ini \
+    && echo "date.timezone = Europe/Paris" >> /usr/local/etc/php/conf.d/php.ini
+    
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$version \
     && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
     && mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
     && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini
+    
 RUN pecl install xdebug \
     && touch $PHP_INI_DIR/conf.d/xdebug.ini \
     && echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20131226/xdebug.so' >> $PHP_INI_DIR/conf.d/xdebug.ini \
@@ -35,6 +47,7 @@ RUN pecl install xdebug \
     && echo 'xdebug.var_display_max_depth=10' >> $PHP_INI_DIR/conf.d/xdebug.ini \
     && echo 'xdebug.cli_color=1' >> $PHP_INI_DIR/conf.d/xdebug.ini \
     && echo 'xdebug.show_local_vars=1' >> $PHP_INI_DIR/conf.d/xdebug.ini
+    
 RUN docker-php-ext-install opcache \
    && touch $PHP_INI_DIR/conf.d/opcache.ini \
    && echo 'zend_extension=opcache.so' >> $PHP_INI_DIR/conf.d/opcache.ini \
