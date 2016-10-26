@@ -1,10 +1,4 @@
 FROM nginx:latest
 MAINTAINER Ronan Pozzi <contact@treenity-web.fr>
 
-ADD ./default.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 80
-
-VOLUME /usr/share/nginx/html
-
-WORKDIR /usr/share/nginx/html
+COPY ./conf.d/ /etc/nginx/conf.d/
