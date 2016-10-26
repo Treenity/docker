@@ -26,9 +26,9 @@ RUN docker-php-ext-install intl mcrypt mbstring mysql mysqli pdo_mysql ftp socke
     && docker-php-ext-install gd
     
 RUN touch /usr/local/etc/php/conf.d/php.ini \
-    && echo "memory_limit  = 128M" >> /usr/local/etc/php/conf.d/php.ini \
-    && echo "upload_max_filesize = 1024" >> /usr/local/etc/php/conf.d/php.ini \
-    && echo "post_max_size = 1024" >> /usr/local/etc/php/conf.d/php.ini \
+    && echo "memory_limit  = 1024M" >> /usr/local/etc/php/conf.d/php.ini \
+    && echo "upload_max_filesize = 1024M" >> /usr/local/etc/php/conf.d/php.ini \
+    && echo "post_max_size = 1024M" >> /usr/local/etc/php/conf.d/php.ini \
     && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/php.ini \
     && echo "display_errors = On" >> /usr/local/etc/php/conf.d/php.ini \
     && echo "date.timezone = Europe/Paris" >> /usr/local/etc/php/conf.d/php.ini
