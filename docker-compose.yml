@@ -1,50 +1,63 @@
 version: '2'
 services:
-  memcached:
-      image: memcached:latest
-      container_name: memcached
-
   mysql:
-    image: treenity/mysql
-    container_name: mysql
-    restart: always
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
-    volumes:
-      - "./.docker/mysql/database:/var/lib/mysql"
+      image: mariadb
+      environment:
+        MYSQL_DATABASE: wordpress
+        MYSQL_USER: wordpress
+        MYSQL_PASSWORD: wordpress
+        MYSQL_ROOT_PASSWORD: root
+      volumes:
+        - "./docker/database:/var/lib/mysql"
+      ports:
+        - 3306:3306
 
-  apache:
-    image: treenity/apache
-    container_name: apache
-    restart: always
-    depends_on:
-      - mysql
-    links:
-      - mysql
-      - memcached:memcached
-    ports:
-      - "80:80"
-    volumes:
-      - "./:/var/www/html"
-    environment:
-      XDEBUG_CONFIG: "remote_host={{YOUR_LOCAL_IP}}"
-      PHP_IDE_CONFIG: "serverName={{DOCKER_HOST_IP}}"
+  php:
+      build: fpm
+      ports:
+        - "2222:22"
+        - "9000:9000"
+      links:
+        - mysql:db
+        - blackfire:blackfire
+        - maildev:maildev
+      volumes_from:
+        - nginx
+      environment:
+        XDEBUG_CONFIG: "remote_host=192.168.1.10"
+        PHP_IDE_CONFIG: "serverName=docker"
+
+  nginx:
+      build: nginx
+      restart: always
+      ports:
+        - "80:80"
+      volumes:
+        - "./:/var/www/html"
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOSTS=mysql
-      - PMA_USER=root
-      - PMA_PASSWORD=root
-    restart: always
-    ports:
-      - 8080:80
-    volumes:
-      - "/sessions"
+      image: phpmyadmin/phpmyadmin
+      links:
+        - mysql:mysql
+      environment:
+        - PMA_HOST=mysql
+        - PMA_USER=root
+        - PMA_PASSWORD=root
+      restart: always
+      ports:
+        - "8080:80"
+      volumes:
+        - "/sessions"
+
+  blackfire:
+      image: blackfire/blackfire
+      environment:
+        - BLACKFIRE_CLIENT_ID=***
+        - BLACKFIRE_CLIENT_TOKEN=***
+        - BLACKFIRE_SERVER_ID=***
+        - BLACKFIRE_SERVER_TOKEN=***
+
+  maildev:
+      image: djfarrelly/maildev
+      ports:
+        - "1080:80"
