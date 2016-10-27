@@ -1,7 +1,7 @@
 version: '2'
 services:
   mysql:
-      image: mariadb
+      image: treenity/mysql
       environment:
         MYSQL_DATABASE: wordpress
         MYSQL_USER: wordpress
@@ -13,7 +13,7 @@ services:
         - 3306:3306
 
   php:
-      build: fpm
+      image: treenity/php:5.6
       ports:
         - "2222:22"
         - "9000:9000"
@@ -26,9 +26,11 @@ services:
       environment:
         XDEBUG_CONFIG: "remote_host=192.168.1.10"
         PHP_IDE_CONFIG: "serverName=docker"
+        XDEBUG_ENABLE: 0
+        OPCACHE_ENABLE: 0
 
   nginx:
-      build: nginx
+      image: treenity/nginx
       restart: always
       ports:
         - "80:80"
