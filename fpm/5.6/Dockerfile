@@ -44,7 +44,8 @@ RUN touch /usr/local/etc/php/conf.d/php.ini \
     && echo 'post_max_size = 1024M' >> /usr/local/etc/php/conf.d/php.ini \
     && echo 'error_reporting = E_ALL' >> /usr/local/etc/php/conf.d/php.ini \
     && echo 'display_errors = On' >> /usr/local/etc/php/conf.d/php.ini \
-    && echo 'date.timezone = UTC' >> /usr/local/etc/php/conf.d/php.ini
+    && echo 'date.timezone = UTC' >> /usr/local/etc/php/conf.d/php.ini \
+    && echo 'max_input_vars = 3000' >> /usr/local/etc/php/conf.d/php.ini
 
 # Install BlackFire
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
