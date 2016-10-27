@@ -74,7 +74,7 @@ RUN docker-php-ext-install opcache
    && echo 'opcache.use_cwd=0' >> $PHP_INI_DIR/conf.d/opcache.ini \
    && echo 'opcache.validate_timestamps=0' >> $PHP_INI_DIR/conf.d/opcache.ini \
    && echo 'opcache.fast_shutdown=1' >> $PHP_INI_DIR/conf.d/opcache.ini \
-   && echo 'opcache.max_file_size=0' >> $PHP_INI_DIR/conf.d/opcache.ini \
+   && echo 'opcache.max_file_size=0' >> $PHP_INI_DIR/conf.d/opcache.ini
 
 EXPOSE 22
 
