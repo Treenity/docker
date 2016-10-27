@@ -39,13 +39,14 @@ RUN docker-php-ext-install intl mcrypt mbstring mysql mysqli pdo_mysql ftp socke
 
 # Install PHP Variables
 RUN touch /usr/local/etc/php/conf.d/php.ini \
-    && echo 'memory_limit  = 1024M' >> /usr/local/etc/php/conf.d/php.ini \
+    && echo 'memory_limit  = 256M' >> /usr/local/etc/php/conf.d/php.ini \
     && echo 'upload_max_filesize = 1024M' >> /usr/local/etc/php/conf.d/php.ini \
     && echo 'post_max_size = 1024M' >> /usr/local/etc/php/conf.d/php.ini \
     && echo 'error_reporting = E_ALL' >> /usr/local/etc/php/conf.d/php.ini \
     && echo 'display_errors = On' >> /usr/local/etc/php/conf.d/php.ini \
     && echo 'date.timezone = UTC' >> /usr/local/etc/php/conf.d/php.ini \
     && echo 'max_input_vars = 3000' >> /usr/local/etc/php/conf.d/php.ini
+    && echo 'max_execution_time = 180' >> /usr/local/etc/php/conf.d/php.ini
 
 # Install BlackFire
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
