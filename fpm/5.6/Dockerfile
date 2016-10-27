@@ -56,18 +56,18 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini
 
 # Install XDEBUG
-RUN pecl install xdebug \
-    && touch $PHP_INI_DIR/conf.d/xdebug.ini \
-    && echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20131226/xdebug.so' >> $PHP_INI_DIR/conf.d/xdebug.ini \
-    && echo 'xdebug.default_enable=0' >> $PHP_INI_DIR/conf.d/xdebug.ini \
-    && echo 'xdebug.autostart=0' >> $PHP_INI_DIR/conf.d/xdebug.ini \
-    && echo 'xdebug.remote_enable=${XDEBUG_ENABLE}' >> $PHP_INI_DIR/conf.d/xdebug.ini \
-    && echo 'xdebug.profiler_enable=0' >> $PHP_INI_DIR/conf.d/xdebug.ini \
-    && echo 'xdebug.remote_connect_back=0' >> $PHP_INI_DIR/conf.d/xdebug.ini \
-    && echo 'xdebug.var_display_max_depth=10' >> $PHP_INI_DIR/conf.d/xdebug.ini \
-    && echo 'xdebug.cli_color=1' >> $PHP_INI_DIR/conf.d/xdebug.ini \
-    && echo 'xdebug.remote_handler=dbgp' >> $PHP_INI_DIR/conf.d/xdebug.ini \
-    && echo 'xdebug.show_local_vars=1' >> $PHP_INI_DIR/conf.d/xdebug.ini
+#RUN pecl install xdebug \
+#    && touch $PHP_INI_DIR/conf.d/xdebug.ini \
+#    && echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20131226/xdebug.so' >> $PHP_INI_DIR/conf.d/xdebug.ini \
+#    && echo 'xdebug.default_enable=0' >> $PHP_INI_DIR/conf.d/xdebug.ini \
+#    && echo 'xdebug.autostart=0' >> $PHP_INI_DIR/conf.d/xdebug.ini \
+#    && echo 'xdebug.remote_enable=${XDEBUG_ENABLE}' >> $PHP_INI_DIR/conf.d/xdebug.ini \
+#    && echo 'xdebug.profiler_enable=0' >> $PHP_INI_DIR/conf.d/xdebug.ini \
+#    && echo 'xdebug.remote_connect_back=0' >> $PHP_INI_DIR/conf.d/xdebug.ini \
+#    && echo 'xdebug.var_display_max_depth=10' >> $PHP_INI_DIR/conf.d/xdebug.ini \
+#    && echo 'xdebug.cli_color=1' >> $PHP_INI_DIR/conf.d/xdebug.ini \
+#    && echo 'xdebug.remote_handler=dbgp' >> $PHP_INI_DIR/conf.d/xdebug.ini \
+#    && echo 'xdebug.show_local_vars=1' >> $PHP_INI_DIR/conf.d/xdebug.ini
 
 # Install OPCACHE
 RUN docker-php-ext-install opcache \
