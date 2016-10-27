@@ -23,7 +23,15 @@ RUN useradd docker -d /var/www/html -p null -s /bin/bash -g sudo \
     
 RUN docker-php-ext-install intl mcrypt mbstring mysql mysqli pdo_mysql ftp sockets xmlrpc zip \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install gd
+    && docker-php-ext-install gd && docker-php-ext-install pdo_pgsql
+    
+# Install opcache
+RUN docker-php-ext-install opcache
+
+# Install 
+RUN pecl install apcu
+RUN echo "extension=apcu.so" > /usr/local/etc/php/conf.d/apcu.ini
+
     
 RUN touch /usr/local/etc/php/conf.d/php.ini \
     && echo "memory_limit  = 1024M" >> /usr/local/etc/php/conf.d/php.ini \
@@ -49,14 +57,14 @@ RUN pecl install xdebug \
 #    && echo 'xdebug.cli_color=1' >> $PHP_INI_DIR/conf.d/xdebug.ini \
 #    && echo 'xdebug.show_local_vars=1' >> $PHP_INI_DIR/conf.d/xdebug.ini
     
-RUN docker-php-ext-install opcache \
-   && touch $PHP_INI_DIR/conf.d/opcache.ini \
-   && echo 'zend_extension=opcache.so' >> $PHP_INI_DIR/conf.d/opcache.ini \
-   && echo 'opcache.enable="1"' >> $PHP_INI_DIR/conf.d/opcache.ini \
-   && echo 'opcache.use_cwd="0"' >> $PHP_INI_DIR/conf.d/opcache.ini \
-   && echo 'opcache.validate_timestamps="0"' >> $PHP_INI_DIR/conf.d/opcache.ini \
-   && echo 'opcache.fast_shutdown="1"' >> $PHP_INI_DIR/conf.d/opcache.ini \
-   && echo 'opcache.max_file_size="0"' >> $PHP_INI_DIR/conf.d/opcache.ini \
+#RUN docker-php-ext-install opcache
+#   && touch $PHP_INI_DIR/conf.d/opcache.ini \
+#   && echo 'zend_extension=opcache.so' >> $PHP_INI_DIR/conf.d/opcache.ini \
+#   && echo 'opcache.enable="1"' >> $PHP_INI_DIR/conf.d/opcache.ini \
+#   && echo 'opcache.use_cwd="0"' >> $PHP_INI_DIR/conf.d/opcache.ini \
+#   && echo 'opcache.validate_timestamps="0"' >> $PHP_INI_DIR/conf.d/opcache.ini \
+#   && echo 'opcache.fast_shutdown="1"' >> $PHP_INI_DIR/conf.d/opcache.ini \
+#   && echo 'opcache.max_file_size="0"' >> $PHP_INI_DIR/conf.d/opcache.ini \
 
 EXPOSE 22
 
