@@ -67,6 +67,7 @@ RUN pecl install xdebug \
     && echo 'xdebug.remote_handler=dbgp' >> $PHP_INI_DIR/conf.d/xdebug.ini \
     && echo 'xdebug.show_local_vars=1' >> $PHP_INI_DIR/conf.d/xdebug.ini
 
+# Install OPCACHE
 RUN docker-php-ext-install opcache
    && touch $PHP_INI_DIR/conf.d/opcache.ini \
    && echo 'zend_extension=opcache.so' >> $PHP_INI_DIR/conf.d/opcache.ini \
