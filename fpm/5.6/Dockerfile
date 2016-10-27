@@ -2,11 +2,11 @@ FROM php:5.6-fpm
 MAINTAINER Ronan Pozzi <contact@treenity-web.fr>
 
 # ENV can be set from compose
-ARG XDEBUG_ENABLE = 0
-ENV XDEBUG_ENABLE = ${XDEBUG_ENABLE}
+ARG XDEBUG_ENABLE=0
+ENV XDEBUG_ENABLE=${XDEBUG_ENABLE}
 
-ARG OPCACHE_ENABLE = 0
-ENV OPCACHE_ENABLE = ${OPCACHE_ENABLE}
+ARG OPCACHE_ENABLE=0
+ENV OPCACHE_ENABLE=${OPCACHE_ENABLE}
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
         sudo \
