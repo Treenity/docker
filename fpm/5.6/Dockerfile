@@ -4,6 +4,9 @@ MAINTAINER Ronan Pozzi <contact@treenity-web.fr>
 ARG XDEBUG_ENABLE=0
 ENV XDEBUG_ENABLE = ${XDEBUG_ENABLE}
 
+ARG OPCACHE_ENABLE=0
+ENV OPCACHE_ENABLE = ${OPCACHE_ENABLE}
+
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
         sudo \
         openssh-server \
@@ -61,7 +64,7 @@ RUN pecl install xdebug \
 #RUN docker-php-ext-install opcache
 #   && touch $PHP_INI_DIR/conf.d/opcache.ini \
 #   && echo 'zend_extension=opcache.so' >> $PHP_INI_DIR/conf.d/opcache.ini \
-#   && echo 'opcache.enable="1"' >> $PHP_INI_DIR/conf.d/opcache.ini \
+#   && echo 'opcache.enable="${OPCACHE_ENABLE}"' >> $PHP_INI_DIR/conf.d/opcache.ini \
 #   && echo 'opcache.use_cwd="0"' >> $PHP_INI_DIR/conf.d/opcache.ini \
 #   && echo 'opcache.validate_timestamps="0"' >> $PHP_INI_DIR/conf.d/opcache.ini \
 #   && echo 'opcache.fast_shutdown="1"' >> $PHP_INI_DIR/conf.d/opcache.ini \
