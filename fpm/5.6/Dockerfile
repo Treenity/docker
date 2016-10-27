@@ -25,9 +25,6 @@ RUN docker-php-ext-install intl mcrypt mbstring mysql mysqli pdo_mysql ftp socke
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd && docker-php-ext-install pdo_pgsql
     
-# Install opcache
-RUN docker-php-ext-install opcache
-
 # Install 
 RUN pecl install apcu
 RUN echo "extension=apcu.so" > /usr/local/etc/php/conf.d/apcu.ini
