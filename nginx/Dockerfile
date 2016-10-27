@@ -1,4 +1,4 @@
 FROM nginx:latest
 MAINTAINER Ronan Pozzi <contact@treenity-web.fr>
 
-COPY ./conf.d/ /etc/nginx/conf.d/
+COPY ./conf/nginx.conf /etc/nginx/nginx.conf
