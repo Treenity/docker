@@ -1,5 +1,11 @@
 version: '2'
 services:
+  app:
+      image: busybox
+      volumes:
+        - "./:/data"
+        - "./.docker/database:/var/lib/mysql"
+
   mysql:
       image: treenity/mysql
       environment:
@@ -7,8 +13,8 @@ services:
         MYSQL_USER: wordpress
         MYSQL_PASSWORD: wordpress
         MYSQL_ROOT_PASSWORD: root
-      volumes:
-        - "./.docker/database:/var/lib/mysql"
+      volumes_from:
+        - data
       ports:
         - 3306:3306
 
@@ -22,7 +28,7 @@ services:
         - blackfire:blackfire
         - maildev:maildev
       volumes_from:
-        - nginx
+        - data
       environment:
         XDEBUG_CONFIG: "remote_host=192.168.1.10"
         PHP_IDE_CONFIG: "serverName=docker"
@@ -34,8 +40,8 @@ services:
       restart: always
       ports:
         - "80:80"
-      volumes:
-        - "./:/app"
+      volumes_from:
+        - data
 
   phpmyadmin:
       image: phpmyadmin/phpmyadmin
