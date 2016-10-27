@@ -1,6 +1,9 @@
 FROM php:5.6-fpm
 MAINTAINER Ronan Pozzi <contact@treenity-web.fr>
 
+ARG XDEBUG_ENABLE=0
+ENV XDEBUG_ENABLE = ${XDEBUG_ENABLE}
+
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
         sudo \
         openssh-server \
