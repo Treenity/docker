@@ -35,8 +35,7 @@ RUN useradd docker -d /var/www/html -p null -s /bin/bash -g sudo \
 # Add some extensions
 RUN docker-php-ext-install intl mcrypt mbstring mysql mysqli pdo_mysql ftp sockets xmlrpc zip \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install gd \
-    && docker-php-ext-install pdo_pgsql
+    && docker-php-ext-install gd
 
 # Install APCU
 RUN pecl install apcu
