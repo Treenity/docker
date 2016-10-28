@@ -53,11 +53,14 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini
 
 # Install XDEBUG
-RUN yes | pecl install xdebug \
-    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_enable=${XDEBUG_ENABLE}" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_connect_back=off" >> /usr/local/etc/php/conf.d/xdebug.ini
+RUN pecl install xdebug \
+    && touch $PHP_INI_DIR/conf.d/xdebug.ini \
+    && echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20131226/xdebug.so' >> $PHP_INI_DIR/conf.d/xdebug.ini \
+    && echo 'xdebug.remote_enable=${XDEBUG_ENABLE}' >> $PHP_INI_DIR/conf.d/xdebug.ini \
+    && echo "xdebug.remote_autostart=off" >> $PHP_INI_DIR/conf.d/xdebug.ini \
+    && echo 'xdebug.profiler_enable=1' >> $PHP_INI_DIR/conf.d/xdebug.ini \
+    && echo 'xdebug.remote_connect_back=1' >> $PHP_INI_DIR/conf.d/xdebug.ini
+
 
 # Install OPCACHE
 RUN docker-php-ext-install opcache
