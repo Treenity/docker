@@ -36,14 +36,14 @@ RUN docker-php-ext-install intl mcrypt mbstring mysql mysqli pdo_mysql ftp socke
 
 # Install PHP Variables
 RUN touch /usr/local/etc/php/conf.d/php.ini \
-    && echo 'memory_limit  = 256M' >> /usr/local/etc/php/conf.d/php.ini \
+    && echo 'memory_limit  = 512M' >> /usr/local/etc/php/conf.d/php.ini \
     && echo 'upload_max_filesize = 1024M' >> /usr/local/etc/php/conf.d/php.ini \
     && echo 'post_max_size = 128M' >> /usr/local/etc/php/conf.d/php.ini \
     && echo 'error_reporting = E_ALL' >> /usr/local/etc/php/conf.d/php.ini \
     && echo 'display_errors = On' >> /usr/local/etc/php/conf.d/php.ini \
     && echo 'date.timezone = UTC' >> /usr/local/etc/php/conf.d/php.ini \
     && echo 'max_input_vars = 3000' >> /usr/local/etc/php/conf.d/php.ini \
-    && echo 'max_execution_time = 1800' >> /usr/local/etc/php/conf.d/php.ini
+    && echo 'max_execution_time = -1' >> /usr/local/etc/php/conf.d/php.ini
 
 # Install BlackFire
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
@@ -57,13 +57,13 @@ RUN pecl install xdebug \
     && touch $PHP_INI_DIR/conf.d/xdebug.ini \
     && echo 'zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20131226/xdebug.so' >> $PHP_INI_DIR/conf.d/xdebug.ini \
     && echo 'xdebug.remote_enable=${XDEBUG_ENABLE}' >> $PHP_INI_DIR/conf.d/xdebug.ini \
-    && echo "xdebug.remote_autostart=off" >> $PHP_INI_DIR/conf.d/xdebug.ini \
+    && echo 'xdebug.remote_autostart=off' >> $PHP_INI_DIR/conf.d/xdebug.ini \
     && echo 'xdebug.profiler_enable=1' >> $PHP_INI_DIR/conf.d/xdebug.ini \
     && echo 'xdebug.remote_connect_back=1' >> $PHP_INI_DIR/conf.d/xdebug.ini
 
 
 # Install OPCACHE
-RUN docker-php-ext-install opcache
+#RUN docker-php-ext-install opcache
 #   && touch $PHP_INI_DIR/conf.d/opcache.ini \
 #   && echo 'zend_extension=opcache.so' >> $PHP_INI_DIR/conf.d/opcache.ini \
 #   && echo 'opcache.enable=${OPCACHE_ENABLE}' >> $PHP_INI_DIR/conf.d/opcache.ini \
@@ -72,6 +72,6 @@ RUN docker-php-ext-install opcache
 #   && echo 'opcache.fast_shutdown=1' >> $PHP_INI_DIR/conf.d/opcache.ini \
 #   && echo 'opcache.max_file_size=0' >> $PHP_INI_DIR/conf.d/opcache.ini
 
-EXPOSE 22
+EXPOSE 22 9000
 
 CMD /etc/init.d/ssh start && php-fpm
