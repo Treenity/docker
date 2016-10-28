@@ -1,12 +1,5 @@
 version: '2'
 services:
-  data:
-    image: busybox:latest
-    volumes:
-      - "./.docker/database:/var/lib/mysql"
-      - "./:/app"
-    command: /bin/echo
-
   mysql:
       build: mysql
       environment:
@@ -14,8 +7,8 @@ services:
         MYSQL_USER: bac45
         MYSQL_PASSWORD: bac45
         MYSQL_ROOT_PASSWORD: root
-      volumes_from:
-        - data
+      volumes:
+        - "./.docker/database:/var/lib/mysql"
       ports:
         - 3306:3306
 
@@ -25,11 +18,10 @@ services:
         - mysql
         - blackfire
         - maildev
-      volumes_from:
-        - data
+      volumes_fro: :
+        - nginx
       environment:
         XDEBUG_ENABLE: 0
-        OPCACHE_ENABLE: 0
         XDEBUG_CONFIG: "remote_host=192.168.1.10"
         PHP_IDE_CONFIG: "serverName=docker"
 
@@ -38,17 +30,17 @@ services:
       restart: always
       ports:
         - "80:80"
-      volumes_from:
-        - data
+      volumes:
+        - "./:/var/www/html"
 
   phpmyadmin:
       image: phpmyadmin/phpmyadmin
       links:
         - mysql
       environment:
-        - PMA_HOST=mysql
-        - PMA_USER=root
-        - PMA_PASSWORD=root
+        PMA_HOST: mysql
+        PMA_USER: root
+        PMA_PASSWORD: root
       restart: always
       ports:
         - "8080:80"
