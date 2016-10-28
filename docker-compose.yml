@@ -1,37 +1,39 @@
 version: '2'
 services:
   mysql:
-      build: mysql
+      image: treenity/mysql
       environment:
-        MYSQL_DATABASE: bac45
-        MYSQL_USER: bac45
-        MYSQL_PASSWORD: bac45
+        MYSQL_DATABASE: wordpress
+        MYSQL_USER: wordpress
+        MYSQL_PASSWORD: wordpress
         MYSQL_ROOT_PASSWORD: root
       volumes:
         - "./.docker/database:/var/lib/mysql"
       ports:
-        - 3306:3306
+        - "3306:3306"
 
   php:
-      build: fpm/5.6
+      image: treenity/php:56
       links:
         - mysql
         - blackfire
         - maildev
-      volumes_fro: :
-        - nginx
+      volumes:
+        - "./:/var/www/html"
       environment:
-        XDEBUG_ENABLE: 0
-        XDEBUG_CONFIG: "remote_host=192.168.1.10"
+        XDEBUG_ENABLE: 1
+        XDEBUG_CONFIG: "remote_host=192.168.43.38"
         PHP_IDE_CONFIG: "serverName=docker"
 
   nginx:
-      build: nginx
+      image: treenity/nginx
       restart: always
       ports:
         - "80:80"
-      volumes:
-        - "./:/var/www/html"
+        - "443:443"
+        - "9000:9000"
+      volumes_from:
+        - php
 
   phpmyadmin:
       image: phpmyadmin/phpmyadmin
@@ -50,10 +52,10 @@ services:
   blackfire:
       image: blackfire/blackfire
       environment:
-        BLACKFIRE_CLIENT_ID: ***
-        BLACKFIRE_CLIENT_TOKEN: ***
-        BLACKFIRE_SERVER_ID: ***
-        BLACKFIRE_SERVER_TOKEN: ***
+        BLACKFIRE_CLIENT_ID:
+        BLACKFIRE_CLIENT_TOKEN:
+        BLACKFIRE_SERVER_ID:
+        BLACKFIRE_SERVER_TOKEN:
 
   maildev:
       image: djfarrelly/maildev
