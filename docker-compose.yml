@@ -24,7 +24,7 @@ services:
       - "../.docker/database:/var/lib/mysql"
 
   webserver:
-    build: nginx
+    image: treenity/nginx
     container_name: webserver
     volumes:
         - ..:/var/www/html
@@ -34,7 +34,7 @@ services:
      - php-fpm
 
   php-fpm:
-    build: fpm/7.0
+    image: treenity/php:7.0
     container_name: php-fpm
     volumes:
       - ..:/var/www/html
