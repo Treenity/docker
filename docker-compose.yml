@@ -1,63 +1,74 @@
 version: '2'
 services:
+  memcached:
+    image: phpdockerio/memcached:latest
+    container_name: memcached
+
+  mailhog:
+    image: phpdockerio/mailhog:latest
+    container_name: mailhog
+    ports:
+      - "8081:8025"
+
   mysql:
-      image: treenity/mysql
-      environment:
-        MYSQL_DATABASE: wordpress
-        MYSQL_USER: wordpress
-        MYSQL_PASSWORD: wordpress
-        MYSQL_ROOT_PASSWORD: root
-      volumes:
-        - "./.docker/database:/var/lib/mysql"
-      ports:
-        - "3306:3306"
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=database
+      - MYSQL_USER=database
+      - MYSQL_PASSWORD=database
+    ports:
+      - "3306:3306"
+    volumes:
+      - "../.docker/database:/var/lib/mysql"
 
-  php:
-      image: treenity/php:5.6
-      links:
-        - mysql
-        - blackfire
-        - maildev
-      volumes:
-        - "./:/var/www/html"
-      environment:
-        XDEBUG_ENABLE: 1
-        XDEBUG_CONFIG: "remote_host=192.168.43.38"
-        PHP_IDE_CONFIG: "serverName=docker"
+  webserver:
+    build: nginx
+    container_name: webserver
+    volumes:
+        - ..:/var/www/html
+    ports:
+     - "80:80"
+    links:
+     - php-fpm
 
-  nginx:
-      image: treenity/nginx
-      restart: always
-      ports:
-        - "80:80"
-        - "443:443"
-        - "9000:9000"
-      volumes_from:
-        - php
+  php-fpm:
+    build: fpm/7.0
+    container_name: php-fpm
+    volumes:
+      - ..:/var/www/html
+      #- ./.docker/php-ini-overrides.ini:/etc/php/7.0/fpm/conf.d/99-overrides.ini
+    links:
+      - memcached
+      - mailhog
+      - mysql
+    ports:
+      - "9000:9000"
+    environment:
+      XDEBUG_CONFIG: "remote_host=192.168.1.10"
+      PHP_IDE_CONFIG: "serverName=docker"
 
   phpmyadmin:
-      image: phpmyadmin/phpmyadmin
-      links:
-        - mysql
-      environment:
-        PMA_HOST: mysql
-        PMA_USER: root
-        PMA_PASSWORD: root
-      restart: always
-      ports:
-        - "8080:80"
-      volumes:
-        - "/sessions"
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
+      - mysql
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
+    restart: always
+    ports:
+      - "8181:80"
 
   blackfire:
-      image: blackfire/blackfire
-      environment:
-        BLACKFIRE_CLIENT_ID:
-        BLACKFIRE_CLIENT_TOKEN:
-        BLACKFIRE_SERVER_ID:
-        BLACKFIRE_SERVER_TOKEN:
-
-  maildev:
-      image: djfarrelly/maildev
-      ports:
-        - "1080:80"
+    image: blackfire/blackfire
+    container_name: blackfire
+    environment:
+      BLACKFIRE_CLIENT_ID:
+      BLACKFIRE_CLIENT_TOKEN:
+      BLACKFIRE_SERVER_ID:
+      BLACKFIRE_SERVER_TOKEN:
