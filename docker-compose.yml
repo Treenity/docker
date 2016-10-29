@@ -26,12 +26,12 @@ services:
   webserver:
     image: treenity/nginx
     container_name: webserver
-    volumes:
-        - ..:/var/www/html
+    volumes_from:
+      - php-fpm
     ports:
-     - "80:80"
+      - "80:80"
     links:
-     - php-fpm
+      - php-fpm
 
   php-fpm:
     image: treenity/php:7.0
