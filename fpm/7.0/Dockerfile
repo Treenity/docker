@@ -5,9 +5,6 @@ RUN apt-get update \
     && apt-get -y --no-install-recommends install  php7.0-mysql php7.0-pgsql php7.0-redis php7.0-gd php7.0-imagick php7.0-mbstring php7.0-xdebug \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
-RUN rm /etc/php/7.0/fpm/pool.d/www.conf
-
-COPY ./www.conf /etc/php/7.0/fpm/pool.d/www.conf
 COPY ./php-ini-overrides.ini /etc/php/7.0/fpm/conf.d/99-overrides.ini
 
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
