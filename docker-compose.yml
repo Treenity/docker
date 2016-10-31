@@ -14,7 +14,7 @@ services:
       - ./.docker/database:/var/lib/mysql
 
   webserver:
-    build: nginx
+    image: treenity/nginx
     container_name: webserver
     volumes_from:
       - php-fpm
