@@ -38,7 +38,6 @@ services:
     container_name: php-fpm
     volumes:
       - ..:/var/www/html
-      #- ./.docker/php-ini-overrides.ini:/etc/php/7.0/fpm/conf.d/99-overrides.ini
     links:
       - memcached
       - mailhog
