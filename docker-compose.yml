@@ -1,17 +1,7 @@
 version: '2'
 services:
-  memcached:
-    image: phpdockerio/memcached:latest
-    container_name: memcached
-
-  mailhog:
-    image: phpdockerio/mailhog:latest
-    container_name: mailhog
-    ports:
-      - "8081:8025"
-
   mysql:
-    image: mysql:5.7
+    image: treenity/mysql
     container_name: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
@@ -21,7 +11,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - "../.docker/database:/var/lib/mysql"
+      - ./.docker/database:/var/lib/mysql
 
   webserver:
     image: treenity/nginx
@@ -37,7 +27,8 @@ services:
     image: treenity/php:7.0
     container_name: php-fpm
     volumes:
-      - ..:/var/www/html
+      - .:/var/www/html
+      #- ./.docker/php-ini-overrides.ini:/etc/php/7.0/fpm/conf.d/99-overrides.ini
     links:
       - memcached
       - mailhog
@@ -50,7 +41,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: pma
+    container_name: phpMyAdmin
     links:
       - mysql
     depends_on:
@@ -61,13 +52,23 @@ services:
       PMA_PASSWORD: root
     restart: always
     ports:
-      - "8181:80"
+      - "8080:80"
+
+  memcached:
+    image: phpdockerio/memcached:latest
+    container_name: memcached
+
+  mailhog:
+    image: phpdockerio/mailhog:latest
+    container_name: mailhog
+    ports:
+      - "8081:8025"
 
   blackfire:
     image: blackfire/blackfire
     container_name: blackfire
     environment:
-      BLACKFIRE_CLIENT_ID:
-      BLACKFIRE_CLIENT_TOKEN:
-      BLACKFIRE_SERVER_ID:
-      BLACKFIRE_SERVER_TOKEN:
+      BLACKFIRE_CLIENT_ID: API
+      BLACKFIRE_CLIENT_TOKEN: API
+      BLACKFIRE_SERVER_ID: API
+      BLACKFIRE_SERVER_TOKEN: API
