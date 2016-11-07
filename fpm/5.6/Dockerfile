@@ -1,27 +1,16 @@
-####################################
-# PHPDocker.io PHP 5.6 / FPM image #
-####################################
+FROM phpdockerio/php56-fpm:latest
 
-FROM phpdockerio/php56-cli
-
-# Install dotdeb repo, PHP, composer and selected extensions
+# Install selected extensions and other stuff
 RUN apt-get update \
-    && apt-get -y --no-install-recommends install php5-fpm \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+    && apt-get -y --no-install-recommends install  php5-memcached php5-mysql php5-gd php5-imagick php5-memcache php5-tidy php5-twig php5-xdebug php5-xhprof \
+    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
-# Configure FPM to run properly on docker
-RUN sed -i "/listen = .*/c\listen = [::]:9000" /etc/php5/fpm/pool.d/www.conf \
-    && sed -i "/;access.log = .*/c\access.log = /proc/self/fd/2" /etc/php5/fpm/pool.d/www.conf \
-    && sed -i "/;clear_env = .*/c\clear_env = no" /etc/php5/fpm/pool.d/www.conf \
-    && sed -i "/;catch_workers_output = .*/c\catch_workers_output = yes" /etc/php5/fpm/pool.d/www.conf \
-    && sed -i "/pid = .*/c\;pid = /run/php/php5-fpm.pid" /etc/php5/fpm/php-fpm.conf \
-    && sed -i "/;daemonize = .*/c\daemonize = no" /etc/php5/fpm/php-fpm.conf \
-    && sed -i "/error_log = .*/c\error_log = /proc/self/fd/2" /etc/php5/fpm/php-fpm.conf \
-    && usermod -u 1000 www-data
+COPY ./php-ini-overrides.ini /etc/php5/fpm/conf.d/99-overrides.ini
 
-# The following runs FPM and removes all its extraneous log output on top of what your app outputs to stdout
-CMD /usr/sbin/php5-fpm -F -O 2>&1 | sed -u 's,.*: \"\(.*\)$,\1,'| sed -u 's,"$,,' 1>&1
+RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
+    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$version \
+    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
+    && mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
+    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > /etc/php5/fpm/conf.d/20-blackfire.ini
 
-# Open up fcgi port
-EXPOSE 9000
+WORKDIR "/var/www/html"
