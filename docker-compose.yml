@@ -63,12 +63,3 @@ services:
     container_name: mailhog
     ports:
       - "8081:8025"
-
-  blackfire:
-    image: blackfire/blackfire
-    container_name: blackfire
-    environment:
-      BLACKFIRE_CLIENT_ID: API
-      BLACKFIRE_CLIENT_TOKEN: API
-      BLACKFIRE_SERVER_ID: API
-      BLACKFIRE_SERVER_TOKEN: API
