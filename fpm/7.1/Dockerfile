@@ -2,7 +2,7 @@ FROM phpdockerio/php71-fpm:latest
 
 # Install selected extensions and other stuff
 RUN apt-get update \
-    && apt-get -y --no-install-recommends install curl openssl ca-certificates php-memcached mhash \
+    && apt-get -y --no-install-recommends install curl openssl ca-certificates php-memcached \
     && php7.1-mysql php7.1-gd php7.1-mbstring php7.1-tidy php7.1-curl php7.1-readline \
     && php7.1-bcmath php7.1-intl php7.1-mcrypt php7.1-xml php7.1-soap php7.1-xsl php7.1-zip \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
