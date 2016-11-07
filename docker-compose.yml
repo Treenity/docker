@@ -1,7 +1,7 @@
 version: '2'
 services:
   mysql:
-    image: Treenity/mysql
+    image: treenity/mysql
     container_name: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
@@ -24,7 +24,7 @@ services:
       - php-fpm
 
   php-fpm:
-    image: Treenity/php:7.1
+    image: treenity/php:7.0
     container_name: php-fpm
     volumes:
       - ./:/var/www/html
