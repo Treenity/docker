@@ -3,6 +3,8 @@ FROM phpdockerio/php56-fpm:latest
 # Install selected extensions and other stuff
 RUN apt-get update \
     && apt-get -y --no-install-recommends install  php5-memcached php5-mysql php5-gd php5-imagick php5-memcache php5-tidy php5-twig php5-xdebug php5-xhprof \
+    && php5-curl php5-readline \
+    && php5-bcmath php5-intl php5-mcrypt php5-xml php5-soap php5-xsl php5-zip\
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 COPY ./php-ini-overrides.ini /etc/php5/fpm/conf.d/99-overrides.ini
