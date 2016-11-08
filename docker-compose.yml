@@ -1,65 +1,67 @@
 version: '2'
 services:
   mysql:
-    image: treenity/mysql
-    container_name: mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=database
-      - MYSQL_USER=database
-      - MYSQL_PASSWORD=database
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./.docker/database:/var/lib/mysql
+      image: treenity/mysql
+      environment:
+        MYSQL_DATABASE: ${PROJECT_NAME}
+        MYSQL_USER: ${PROJECT_NAME}
+        MYSQL_PASSWORD: ${PROJECT_NAME}
+        MYSQL_ROOT_PASSWORD: root
+      volumes:
+        - "./.docker/database:/var/lib/mysql"
+      ports:
+        - 3306:3306
 
   webserver:
-    image: treenity/nginx
-    container_name: webserver
-    volumes_from:
-      - php-fpm
-    ports:
-      - "80:80"
-    links:
-      - php-fpm
+      image: treenity/nginx
+      volumes_from:
+        - php-fpm
+      ports:
+        - "80:80"
+      links:
+        - php-fpm
 
   php-fpm:
-    image: treenity/php:7.0
-    container_name: php-fpm
-    volumes:
-      - ./:/var/www/html
-      #- ./.docker/php-ini-overrides.ini:/etc/php/7.0/fpm/conf.d/99-overrides.ini
-    links:
-      - memcached
-      - mailhog
-      - mysql
-    ports:
-      - "9000:9000"
-    environment:
-      XDEBUG_CONFIG: "remote_host=192.168.1.10 remote_enable=0 profiler_enable=0"
-      PHP_IDE_CONFIG: "serverName=docker"
+      image: treenity/php:7.0
+      volumes:
+        - ./:/var/www/html
+        #- ./.docker/php-ini-overrides.ini:/etc/php/7.0/fpm/conf.d/99-overrides.ini
+      links:
+        - memcached
+        - mailhog
+        - mysql
+      ports:
+        - "9000:9000"
+      environment:
+        XDEBUG_CONFIG: "remote_host=192.168.1.10 remote_enable=0 profiler_enable=0"
+        PHP_IDE_CONFIG: "serverName=docker"
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpMyAdmin
-    links:
-      - mysql
-    depends_on:
-      - mysql
-    environment:
-      PMA_HOST: mysql
-      PMA_USER: root
-      PMA_PASSWORD: root
-    restart: always
-    ports:
-      - "8080:80"
+      image: phpmyadmin/phpmyadmin
+      links:
+        - mysql
+      depends_on:
+        - mysql
+      environment:
+        PMA_HOST: mysql
+        PMA_USER: root
+        PMA_PASSWORD: root
+      restart: always
+      ports:
+        - "8080:80"
 
   memcached:
-    image: phpdockerio/memcached:latest
-    container_name: memcached
+      image: phpdockerio/memcached:latest
 
   mailhog:
-    image: phpdockerio/mailhog:latest
-    container_name: mailhog
-    ports:
-      - "8081:8025"
+      image: phpdockerio/mailhog:latest
+      ports:
+        - "8081:8025"
+
+  blackfire:
+      image: blackfire/blackfire
+      environment:
+        BLACKFIRE_CLIENT_ID: XXX
+        BLACKFIRE_CLIENT_TOKEN: XXX
+        BLACKFIRE_SERVER_ID: XXX
+        BLACKFIRE_SERVER_TOKEN: XXX
