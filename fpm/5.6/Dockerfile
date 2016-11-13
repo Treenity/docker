@@ -1,9 +1,29 @@
 FROM php:5.6-fpm
 MAINTAINER Ronan Pozzi <contact@treenity-web.fr>
 
-RUN apt-get update \
-    && apt-get -y --no-install-recommends install  php5-memcached php5-mysql php5-gd php5-imagick php5-memcache php5-tidy php5-twig php5-xdebug php5-xhprof \
-    && php5-curl php5-readline php5-bcmath php5-intl php5-mcrypt php5-xml php5-soap php5-xsl php5-zip \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update -q \
+    && DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libmcrypt-dev \
+        libpng12-dev \
+        libcurl4-nss-dev \
+        php5-xdebug \
+        php5-xhprof \
+        php5-memcached \
+        php5-memcache \
+    && docker-php-ext-install iconv mcrypt \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install gd \
+    && docker-php-ext-install curl \
+    && docker-php-ext-install mysqli \
+    && docker-php-ext-install pdo \
+    && docker-php-ext-install pdo_mysql \
+    && docker-php-ext-install mbstring \
+    && docker-php-ext-install json \
+    && docker-php-ext-install intl \
+    && docker-php-ext-install opcache \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
