@@ -1,8 +1,5 @@
-FROM phpdockerio/nginx:latest
+FROM nginx:latest
 MAINTAINER Ronan Pozzi <contact@treenity-web.fr>
 
-COPY ./nginx.conf /etc/nginx/nginx.conf
-
-VOLUME ['/var/www/html', '/etc/nginx/conf.d/']
-
-WORKDIR ['/var/www/html']
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY conf.d /etc/nginx/conf.d
