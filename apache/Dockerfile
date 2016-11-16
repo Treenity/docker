@@ -8,8 +8,6 @@ RUN apt-get -y install apache2 libapache2-mod-fastcgi
 
 RUN rm /etc/apache2/sites-enabled/*
 
-ENV VIRTUALHOST lab.dev
-
 ADD conf-available /etc/apache2/conf-available
 ADD sites-available /etc/apache2/sites-available
 RUN a2enmod proxy proxy_fcgi \
