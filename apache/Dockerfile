@@ -10,7 +10,7 @@ RUN rm /etc/apache2/sites-enabled/*
 
 ADD conf-available /etc/apache2/conf-available
 ADD sites-available /etc/apache2/sites-available
-RUN a2enmod proxy proxy_fcgi \
+RUN a2enmod proxy proxy_fcgi rewrite \
     && a2enconf servername \
     && a2ensite 000-default
 
