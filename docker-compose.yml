@@ -1,20 +1,59 @@
 version: '2'
 services:
+  mysql:
+      image: treenity/mysql
+      environment:
+        MYSQL_DATABASE: ${PROJECT_NAME}
+        MYSQL_USER: ${PROJECT_NAME}
+        MYSQL_PASSWORD: ${PROJECT_NAME}
+        MYSQL_ROOT_PASSWORD: root
+      volumes:
+        - "./.docker/database:/var/lib/mysql"
+      ports:
+        - "3306:3306"
+
   webserver:
-      build: ./nginx
-      container_name: webserver
+      image: treenity/nginx
       volumes_from:
         - php-fpm
       ports:
         - "80:80"
-      links:
-        - php-fpm
 
   php-fpm:
-      build: ./fpm/5.6
-      container_name: php-fpm
+      image: treenity/php:7.0
       volumes:
         - ./:/var/www/html
+        #- ./.docker/php-ini-overrides.ini:/etc/php/7.0/fpm/conf.d/99-overrides.ini
+      ports:
+        - "9000:9000"
       environment:
         XDEBUG_CONFIG: "remote_host=192.168.1.10 remote_enable=0 profiler_enable=0"
         PHP_IDE_CONFIG: "serverName=docker"
+
+  phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      depends_on:
+        - mysql
+      environment:
+        PMA_HOST: mysql
+        PMA_USER: root
+        PMA_PASSWORD: root
+      restart: always
+      ports:
+        - "8080:80"
+
+  memcached:
+      image: phpdockerio/memcached:latest
+
+  #mailhog:
+      #image: phpdockerio/mailhog:latest
+      #ports:
+        #- "8081:8025"
+
+  #blackfire:
+      #image: blackfire/blackfire
+      #environment:
+        #BLACKFIRE_CLIENT_ID: XXX
+        #BLACKFIRE_CLIENT_TOKEN: XXX
+        #BLACKFIRE_SERVER_ID: XXX
+        #BLACKFIRE_SERVER_TOKEN: XXX
