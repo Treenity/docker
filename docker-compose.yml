@@ -45,10 +45,10 @@ services:
   memcached:
       image: phpdockerio/memcached:latest
 
-  #mailhog:
-      #image: phpdockerio/mailhog:latest
-      #ports:
-        #- "8081:8025"
+  mailhog:
+      image: phpdockerio/mailhog:latest
+      ports:
+        - "8081:8025"
 
   #blackfire:
       #image: blackfire/blackfire
