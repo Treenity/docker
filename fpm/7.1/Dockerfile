@@ -19,6 +19,6 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
 
 RUN sed -i -e 's/mailhub=mail/mailhub=mailhog:1025/' /etc/ssmtp/ssmtp.conf
 
-RUN echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > $PHP_INI_DIR/conf.d/mail.ini
+RUN echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /etc/php/7.0/fpm/conf.d/20-mail.ini
 
 WORKDIR "/var/www/html"
