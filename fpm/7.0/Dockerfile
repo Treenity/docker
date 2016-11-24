@@ -2,7 +2,7 @@ FROM phpdockerio/php7-fpm:latest
 
 # Install selected extensions and other stuff
 RUN apt-get update \
-    && apt-get -y --no-install-recommends install php7.0-mysql php7.0-pgsql php7.0-redis php7.0-gd php7.0-imagick php7.0-mbstring php7.0-xdebug \
+    && apt-get -y --no-install-recommends install ssmtp php7.0-mysql php7.0-pgsql php7.0-redis php7.0-gd php7.0-imagick php7.0-mbstring php7.0-xdebug \
     && php7.0-tidy php7.0-curl php7.0-readline \
     && php7.0-bcmath php7.0-intl php7.0-mcrypt php7.0-xml php7.0-soap php7.0-xsl php7.0-zip\
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
@@ -16,5 +16,9 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
     && mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
     && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > /etc/php/7.0/fpm/conf.d/20-blackfire.ini
+
+RUN sed -i -e 's/mailhub=mail/mailhub=mailhog:1025/' /etc/ssmtp/ssmtp.conf
+
+RUN echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > $PHP_INI_DIR/conf.d/mail.ini
 
 WORKDIR "/var/www/html"
