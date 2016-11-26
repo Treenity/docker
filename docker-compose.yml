@@ -10,14 +10,15 @@ services:
       volumes:
         - "./.docker/database:/var/lib/mysql"
       ports:
-        - "3306:3306"
+        - 3306:3306
 
   webserver:
       image: treenity/nginx
       volumes_from:
         - php-fpm
       ports:
-        - "80:80"
+        - 80:80
+        - 443:443
 
   php-fpm:
       image: treenity/php:7.0
@@ -25,7 +26,7 @@ services:
         - ./:/var/www/html
         #- ./.docker/php-ini-overrides.ini:/etc/php/7.0/fpm/conf.d/99-overrides.ini
       ports:
-        - "9000:9000"
+        - 9000:9000
       environment:
         XDEBUG_CONFIG: "remote_host=192.168.1.10 remote_enable=0 profiler_enable=0"
         PHP_IDE_CONFIG: "serverName=docker"
@@ -40,15 +41,15 @@ services:
         PMA_PASSWORD: root
       restart: always
       ports:
-        - "8080:80"
+        - 8080:80
 
   memcached:
-      image: phpdockerio/memcached:latest
+      image: memcached:latest
 
   mailhog:
-      image: phpdockerio/mailhog:latest
+      image: mailhog/mailhog:latest
       ports:
-        - "8081:8025"
+        - 8081:8025
 
   dockerui:
       image: uifd/ui-for-docker
