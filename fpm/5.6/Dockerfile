@@ -50,27 +50,6 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
 # Override ssmtp to mailhog
 RUN sed -i -e 's/mailhub=mail/mailhub=mailhog:1025/' /etc/ssmtp/ssmtp.conf
 
-# Tune up PHP-FPM
-RUN sed -i -e "s|;catch_workers_output\s*=.*|catch_workers_output = yes|g" $PHP_INI_DIR/pool.d/www.conf && \
-    sed -i -e "s|^pm.max_children =.*|pm.max_children = 9|g" $PHP_INI_DIR/pool.d/www.conf && \
-    sed -i -e "s|^pm.start_servers =.*|pm.start_servers = 3|g" $PHP_INI_DIR/pool.d/www.conf && \
-    sed -i -e "s|^pm.min_spare_servers =.*|pm.min_spare_servers = 2|g" $PHP_INI_DIR/pool.d/www.conf && \
-    sed -i -e "s|^pm.max_spare_servers =.*|pm.max_spare_servers = 4|g" $PHP_INI_DIR/pool.d/www.conf && \
-    sed -i -e "s|;pm.max_requests =.*|pm.max_requests = 200|g" $PHP_INI_DIR/pool.d/www.conf && \
-    sed -i -e "s|;security.limit_extensions =.*|security.limit_extensions = .php|g" $PHP_INI_DIR/pool.d/www.conf
-
-# Tune up PHP.ini
-RUN sed -i "s|;date.timezone =.*|date.timezone = ${TIMEZONE}|" $PHP_INI_DIR/php.ini && \
-    sed -i "s|memory_limit =.*|memory_limit = ${PHP_MEMORY_LIMIT}|" $PHP_INI_DIR/php.ini && \
-    sed -i "s|upload_max_filesize =.*|upload_max_filesize = ${MAX_UPLOAD}|" $PHP_INI_DIR/php.ini && \
-    sed -i "s|max_file_uploads =.*|max_file_uploads = ${PHP_MAX_FILE_UPLOAD}|" $PHP_INI_DIR/php.ini && \
-    sed -i "s|post_max_size =.*|max_file_uploads = ${PHP_MAX_POST}|" $PHP_INI_DIR/php.ini && \
-    sed -i 's|short_open_tag =.*|short_open_tag = On|' $PHP_INI_DIR/php.ini && \
-    sed -i 's|error_reporting =.*|error_reporting = -1|' $PHP_INI_DIR/php.ini && \
-    sed -i 's|display_errors =.*|display_errors = On|' $PHP_INI_DIR/php.ini && \
-    sed -i 's|display_startup_errors =.*|display_startup_errors = On|' $PHP_INI_DIR/php.ini && \
-    sed -i -re 's|^(;?)(session.save_path) =.*|\2 = "/tmp"|g' $PHP_INI_DIR/php.ini
-
 # Copy override
 COPY ./php-ini-overrides.ini $PHP_INI_DIR/conf.d/99-overrides.ini
 
