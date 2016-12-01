@@ -1,4 +1,5 @@
 FROM php:5.6-fpm
+
 MAINTAINER Ronan Pozzi <contact@treenity-web.fr>
 
 ENV PHP_MEMORY_LIMIT=512M \
@@ -68,8 +69,7 @@ RUN sed -i "s|;date.timezone =.*|date.timezone = ${TIMEZONE}|" $PHP_INI_DIR/php.
     sed -i 's|error_reporting =.*|error_reporting = -1|' $PHP_INI_DIR/php.ini && \
     sed -i 's|display_errors =.*|display_errors = On|' $PHP_INI_DIR/php.ini && \
     sed -i 's|display_startup_errors =.*|display_startup_errors = On|' $PHP_INI_DIR/php.ini && \
-    sed -i -re 's|^(;?)(session.save_path) =.*|\2 = "/tmp"|g' $PHP_INI_DIR/php.ini \
-    sed -i 's|sendmail_path =.*|sendmail_path = "/usr/sbin/ssmtp -t"' > $PHP_INI_DIR/php.ini
+    sed -i -re 's|^(;?)(session.save_path) =.*|\2 = "/tmp"|g' $PHP_INI_DIR/php.ini
 
 # Copy override
 COPY ./php-ini-overrides.ini $PHP_INI_DIR/conf.d/99-overrides.ini

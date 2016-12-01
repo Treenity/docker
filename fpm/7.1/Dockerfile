@@ -1,5 +1,7 @@
 FROM phpdockerio/php71-fpm:latest
 
+MAINTAINER Ronan Pozzi <contact@treenity-web.fr>
+
 ENV PHP_MEMORY_LIMIT=512M \
     MAX_UPLOAD=512M \
     PHP_MAX_FILE_UPLOAD=200 \
@@ -45,8 +47,7 @@ RUN sed -i "s|;date.timezone =.*|date.timezone = ${TIMEZONE}|" /etc/php/7.1/fpm/
     sed -i 's|error_reporting =.*|error_reporting = -1|' /etc/php/7.1/fpm/php.ini && \
     sed -i 's|display_errors =.*|display_errors = On|' /etc/php/7.1/fpm/php.ini && \
     sed -i 's|display_startup_errors =.*|display_startup_errors = On|' /etc/php/7.1/fpm/php.ini && \
-    sed -i -re 's|^(;?)(session.save_path) =.*|\2 = "/tmp"|g' /etc/php/7.1/fpm/php.ini \
-    sed -i 's|sendmail_path =.*|sendmail_path = "/usr/sbin/ssmtp -t"' > /etc/php/7.1/fpm/php.ini
+    sed -i -re 's|^(;?)(session.save_path) =.*|\2 = "/tmp"|g' /etc/php/7.1/fpm/php.ini
 
 # Copy override
 COPY ./php-ini-overrides.ini /etc/php/7.1/fpm/conf.d/99-overrides.ini
