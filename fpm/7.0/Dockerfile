@@ -42,7 +42,7 @@ RUN sed -i "s|;date.timezone =.*|date.timezone = ${TIMEZONE}|" /etc/php/7.0/fpm/
     sed -i "s|memory_limit =.*|memory_limit = ${PHP_MEMORY_LIMIT}|" /etc/php/7.0/fpm/php.ini && \
     sed -i "s|upload_max_filesize =.*|upload_max_filesize = ${MAX_UPLOAD}|" /etc/php/7.0/fpm/php.ini && \
     sed -i "s|max_file_uploads =.*|max_file_uploads = ${PHP_MAX_FILE_UPLOAD}|" /etc/php/7.0/fpm/php.ini && \
-    sed -i "s|post_max_size =.*|max_file_uploads = ${PHP_MAX_POST}|" /etc/php/7.0/fpm/php.ini && \
+    sed -i "s|post_max_size =.*|post_max_size = ${PHP_MAX_POST}|" /etc/php/7.0/fpm/php.ini && \
     sed -i 's|short_open_tag =.*|short_open_tag = On|' /etc/php/7.0/fpm/php.ini && \
     sed -i 's|error_reporting =.*|error_reporting = -1|' /etc/php/7.0/fpm/php.ini && \
     sed -i 's|display_errors =.*|display_errors = On|' /etc/php/7.0/fpm/php.ini && \
