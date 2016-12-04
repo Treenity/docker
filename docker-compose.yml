@@ -13,7 +13,7 @@ services:
         - 3306:3306
 
   webserver:
-#if ($USE_NGINX != '')
+#if ($USE_NGINX != '' && $USE_NGINX != 'n')
       image: treenity/nginx
 #else
       image: treenity/apache
@@ -36,7 +36,7 @@ services:
       ports:
         - 9000:9000
       environment:
-        XDEBUG_CONFIG: "remote_host=192.168.1.10 remote_enable=0 profiler_enable=0"
+        XDEBUG_CONFIG: "#if($XDEBUG_IP != '')remote_host=$XDEBUG_IP#end#if($USE_XDEBUG != '' && $USE_XDEBUG != 'n') remote_enable=1#end#if($USE_XDEBUG_PROFILER != '' && $USE_XDEBUG_PROFILER != 'n') profiler_enable=1#end"
         PHP_IDE_CONFIG: "serverName=docker"
 
   phpmyadmin:
@@ -67,7 +67,8 @@ services:
         - /var/run/docker.sock:/var/run/docker.sock
       ports:
         - 8082:9000
-#if ($USE_BLACKFIRE != '')
+
+#if ($USE_BLACKFIRE != '' && $USE_BLACKFIRE != 'n')
   blackfire:
     image: blackfire/blackfire
     environment:
