@@ -13,7 +13,11 @@ services:
         - 3306:3306
 
   webserver:
+#if ($USE_NGINX != '' && $USE_NGINX != 'n')
       image: treenity/nginx
+#else
+      image: treenity/apache
+#end
       volumes_from:
         - php-fpm
       ports:
@@ -21,14 +25,18 @@ services:
         - 443:443
 
   php-fpm:
+#if ($PHP_VERSION != '')
+      image: treenity/php:$PHP_VERSION
+#else
       image: treenity/php:7.0
+#end
       volumes:
         - ./:/var/www/html
         #- ./.docker/php-ini-overrides.ini:/etc/php/7.0/fpm/conf.d/99-overrides.ini
       ports:
         - 9000:9000
       environment:
-        XDEBUG_CONFIG: "remote_host=192.168.1.10 remote_enable=0 profiler_enable=0"
+        XDEBUG_CONFIG: "#if($XDEBUG_IP != '')remote_host=$XDEBUG_IP#end#if($USE_XDEBUG != '' && $USE_XDEBUG != 'n') remote_enable=1#end#if($USE_XDEBUG_PROFILER != '' && $USE_XDEBUG_PROFILER != 'n') profiler_enable=1#end"
         PHP_IDE_CONFIG: "serverName=docker"
 
   phpmyadmin:
@@ -60,10 +68,12 @@ services:
       ports:
         - 8082:9000
 
-  #blackfire:
-      #image: blackfire/blackfire
-      #environment:
-        #BLACKFIRE_CLIENT_ID: XXX
-        #BLACKFIRE_CLIENT_TOKEN: XXX
-        #BLACKFIRE_SERVER_ID: XXX
-        #BLACKFIRE_SERVER_TOKEN: XXX
+#if ($USE_BLACKFIRE != '' && $USE_BLACKFIRE != 'n')
+  blackfire:
+    image: blackfire/blackfire
+    environment:
+      BLACKFIRE_CLIENT_ID: YOUR_BLACKFIRE_CLIENT_ID
+      BLACKFIRE_CLIENT_TOKEN: YOUR_BLACKFIRE_CLIENT_TOKEN
+      BLACKFIRE_SERVER_ID: YOUR_BLACKFIRE_SERVER_ID
+      BLACKFIRE_SERVER_TOKEN: YOUR_BLACKFIRE_SERVER_TOKEN
+#end
