@@ -53,5 +53,6 @@ RUN sed -i -e 's/mailhub=mail/mailhub=mailhog:1025/' /etc/ssmtp/ssmtp.conf
 # Copy override
 COPY ./php-ini-overrides.ini $PHP_INI_DIR/conf.d/99-overrides.ini
 
-
 WORKDIR "/var/www/html"
+
+RUN usermod -u 1000 www-data

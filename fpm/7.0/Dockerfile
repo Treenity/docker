@@ -54,3 +54,5 @@ RUN sed -i "s|;date.timezone =.*|date.timezone = ${TIMEZONE}|" /etc/php/7.0/fpm/
 COPY ./php-ini-overrides.ini /etc/php/7.0/fpm/conf.d/99-overrides.ini
 
 WORKDIR "/var/www/html"
+
+RUN usermod -u 1000 www-data
