@@ -8,7 +8,7 @@ services:
         MYSQL_PASSWORD: ${PROJECT_NAME}
         MYSQL_ROOT_PASSWORD: root
       volumes:
-        - "./.docker/database:/var/lib/mysql"
+        - "mysql_datas:/var/lib/mysql"
       ports:
         - 3306:3306
 
@@ -76,4 +76,8 @@ services:
       BLACKFIRE_CLIENT_TOKEN: YOUR_BLACKFIRE_CLIENT_TOKEN
       BLACKFIRE_SERVER_ID: YOUR_BLACKFIRE_SERVER_ID
       BLACKFIRE_SERVER_TOKEN: YOUR_BLACKFIRE_SERVER_TOKEN
+      
 #end
+volumes:
+  mysql_datas:
+    driver: local
