@@ -23,6 +23,10 @@ services:
       ports:
         - 80:80
         - 443:443
+      environment:
+        NGINX_HOST: 192.168.99.100
+        NGINX_PORT: 80
+      command: /bin/bash -c "DOLLAR=$$ envsubst < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
 
   php-fpm:
 #if ($PHP_VERSION != '')
@@ -76,7 +80,7 @@ services:
       BLACKFIRE_CLIENT_TOKEN: YOUR_BLACKFIRE_CLIENT_TOKEN
       BLACKFIRE_SERVER_ID: YOUR_BLACKFIRE_SERVER_ID
       BLACKFIRE_SERVER_TOKEN: YOUR_BLACKFIRE_SERVER_TOKEN
-      
+
 #end
 volumes:
   mysql_datas:
