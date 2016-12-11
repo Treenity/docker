@@ -32,17 +32,17 @@ server {
 
     location / {
         proxy_redirect false;
-        try_files ${DOLLAR}uri ${DOLLAR}uri/ /index.php${DOLLAR}is_args${DOLLAR}args;
+        try_files $uri $uri/ /index.php$is_args$args;
     }
 
-    location ~ \.php${DOLLAR} {
-        if (!-e ${DOLLAR}request_filename) { rewrite / /index.php last; } ## Catch 404s that try_files miss
-        fastcgi_split_path_info ^(.+\.php)(/.+)${DOLLAR};
+    location ~ \.php$ {
+        if (!-e $request_filename) { rewrite / /index.php last; } ## Catch 404s that try_files miss
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
         include fastcgi_params;
         fastcgi_pass php-fpm:9000;
         fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME ${DOLLAR}document_root${DOLLAR}fastcgi_script_name;
-        fastcgi_param PATH_INFO ${DOLLAR}fastcgi_path_info;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
         fastcgi_intercept_errors on;
     }
 
