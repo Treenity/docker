@@ -31,12 +31,10 @@ server {
     include /var/www/html/*.conf;
 
     location / {
-        proxy_redirect off;
         try_files $uri $uri/ /index.php$is_args$args;
     }
 
     location ~ \.php$ {
-        if (!-e $request_filename) { rewrite / /index.php last; } ## Catch 404s that try_files miss
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
         include fastcgi_params;
         fastcgi_pass php-fpm:9000;
