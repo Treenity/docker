@@ -30,7 +30,7 @@ server {
     include /var/www/html/*.conf;
 
     location / {
-        try_files ${DOLLAR}uri /${DOLLAR}uri /index.php?${DOLLAR}args;
+        try_files ${DOLLAR}uri ${DOLLAR}uri/ /index.php?${DOLLAR}args;
     }
 
     location ~ \.php${DOLLAR} {
