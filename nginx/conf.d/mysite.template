@@ -31,7 +31,7 @@ server {
     include /var/www/html/*.conf;
 
     location / {
-        proxy_redirect false;
+        proxy_redirect off;
         try_files $uri $uri/ /index.php$is_args$args;
     }
 
