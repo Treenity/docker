@@ -1,3 +1,4 @@
+#set($DOLLAR = '$')
 version: '2'
 services:
   mysql:
@@ -24,10 +25,18 @@ services:
         - 80:80
         - 443:443
       environment:
-        NGINX_HOST: 192.168.99.100
-        NGINX_PORT: 80
-      command: /bin/bash -c "envsubst '\\$$NGINX_HOST \\$$NGINX_PORT' < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
-
+#if ($NGINX_HOST != '')
+		NGINX_HOST: $NGINX_HOST
+#else
+		NGINX_HOST: 192.168.99.100
+#end
+#if ($NGINX_PORT != '')
+		NGINX_PORT: $NGINX_PORT
+#else
+		NGINX_PORT: 80
+#end
+      command: /bin/bash -c "envsubst '\\${DOLLAR}${DOLLAR}NGINX_HOST \\${DOLLAR}${DOLLAR}NGINX_PORT' < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+      
   php-fpm:
 #if ($PHP_VERSION != '')
       image: treenity/php:$PHP_VERSION
