@@ -19,6 +19,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -q \
         php5-xdebug \
         php5-xhprof \
         php5-memcached \
+        php5-redis \
+        php5-pgsql \
         memcached \
         php5-memcache \
         ssmtp \
@@ -34,8 +36,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -q \
     && docker-php-ext-install opcache \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
-RUN cp /usr/lib/php5/20131226/* /usr/local/lib/php/extensions/no-debug-non-zts-20131226/
-RUN cp /etc/php5/mods-available/* /usr/local/etc/php/conf.d
+RUN cp /usr/lib/php5/20131226/* /usr/local/lib/php/extensions/no-debug-non-zts-20131226/ \
+	&& cp /etc/php5/mods-available/* /usr/local/etc/php/conf.d
+
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
