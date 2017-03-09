@@ -10,7 +10,7 @@ ENV PHP_MEMORY_LIMIT=512M \
 
 # Install selected extensions and other stuff
 RUN apt-get update \
-    && apt-get -y --no-install-recommends install ssmtp php7.0-mysql php7.0-pgsql php7.0-redis php7.0-gd php7.0-imagick php7.0-mbstring php7.0-xdebug \
+    && apt-get -y --no-install-recommends install ssmtp php7.0-mysql php7.0-pgsql php7.0-redis php7.0-gd php7.0-imagick php7.0-mbstring php7.0-xdebug soap \
     && php7.0-tidy php7.0-curl php7.0-readline \
     && php7.0-bcmath php7.0-intl php7.0-mcrypt php7.0-xml php7.0-soap php7.0-xsl php7.0-zip \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
